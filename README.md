@@ -6,9 +6,10 @@ Download exe from releases or build the solution yourself (executable found in b
 
 `DnsWatcher.exe example.com [example2.com ...]`
 
-## Example
+## Output
 
     .\DnsWatcher.exe google.com bing.com
+    
     12/11/2018 5:23:14 PM | google.com --> 172.217.17.110
     12/11/2018 5:23:14 PM | bing.com   --> 13.107.21.200
     12/11/2018 5:23:17 PM | google.com --> 172.217.17.110
