@@ -2,11 +2,14 @@
 Simple application that watches dns hostnames and notifies if anything changes. 
 
 ## Usage
-Download exe from releases or build the solution yourself (executable found in bin folder).
-
 `DnsWatcher.exe example.com [example2.com ...]`
+### Download
+Download zip from releases and extract to a prefered location. Optionally add DnsWatcher.exe to envoirement path.
 
-## Output
+### Build
+This project is developed and build with Visual Studio 2019 Preview 1.1 and .net core 3.0 preview 1.
+
+## Example output
 
     .\DnsWatcher.exe google.com bing.com
     
@@ -23,6 +26,3 @@ Download exe from releases or build the solution yourself (executable found in b
 
 ## OS limitiation 
 Because an MessageBox is used this project can only run on Windows... Should be easy to change though.
-
-## Build instructions
-This project is developed and build with Visual Studio 2019 Preview 1.1 and .net core 3.0 preview 1.
