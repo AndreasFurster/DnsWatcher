@@ -34,7 +34,7 @@ namespace DnsWatcher.ConsoleApp
 
         private static void PrintIp(string hostname)
         {
-            string ip = null;
+            string ip;
             try
             {
                 var ips = Dns.GetHostAddresses(hostname);
