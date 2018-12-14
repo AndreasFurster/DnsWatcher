@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Net;
 using System.Threading;
-using System.Runtime.InteropServices;
 using System.Collections.Generic;
 
 namespace DnsWatcher.ConsoleApp
@@ -14,8 +13,13 @@ namespace DnsWatcher.ConsoleApp
 
         public static void Main(string[] args)
         {
-            ServicePointManager.DnsRefreshTimeout = 0;
+            if(!args.Any())
+            {
+                Console.WriteLine("You should provide parameters");
+                return;
+            }
 
+            ServicePointManager.DnsRefreshTimeout = 0;
             CheckHostnameAsync(args);
         }
 
@@ -45,20 +49,11 @@ namespace DnsWatcher.ConsoleApp
                 ip = e.Message;
             }
 
-            Console.WriteLine($"{DateTime.Now} | {hostname.PadRight(_padLength)} -> {ip}");
-
-            if (!_currentIps.ContainsKey(hostname))
+            if (!_currentIps.ContainsKey(hostname) || _currentIps[hostname] != ip)
             {
-                _currentIps.Add(hostname, ip);
-            }
-            else if (_currentIps[hostname] != ip)
-            {
-                MessageBox((IntPtr)0, ip, $"Ip of {hostname} changed...", 0);
+                Console.WriteLine($"{DateTime.Now} | {hostname.PadRight(_padLength)} -> {ip}");
                 _currentIps[hostname] = ip;
             }
         }
-
-        [DllImport("User32.dll", CharSet = CharSet.Unicode)]
-        public static extern int MessageBox(IntPtr h, string m, string c, int type);
     }
 }
