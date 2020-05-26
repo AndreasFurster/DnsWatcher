@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Collections.Generic;
+using System.Net.Sockets;
 
 namespace DnsWatcher.ConsoleApp
 {
@@ -13,17 +14,41 @@ namespace DnsWatcher.ConsoleApp
 
         public static void Main(string[] args)
         {
-            if(!args.Any())
+            // Dev
+            //args = new string[]
+            //{
+            //    "google.com",
+            //    "google.nl",
+            //    "-w"
+            //};
+
+            if (!args.Any())
             {
                 Console.WriteLine("You should provide parameters");
                 return;
             }
 
+            var hostnames = args.ToList();
+
+            // Prefix www
+            if (hostnames.Contains("-w"))
+            {
+                hostnames.Remove("-w");
+                var prefixedHostnames = new List<string>();
+
+                foreach (var hostname in hostnames)
+                {
+                    prefixedHostnames.Add($"www.{hostname}");
+                }
+
+                hostnames.AddRange(prefixedHostnames);
+            }
+
             ServicePointManager.DnsRefreshTimeout = 0;
-            CheckHostnameAsync(args);
+            CheckHostnameAsync(hostnames);
         }
 
-        private static void CheckHostnameAsync(string[] hostnames)
+        private static void CheckHostnameAsync(List<string> hostnames)
         {
             _padLength = hostnames.Max(h => h.Length);
 
@@ -42,7 +67,7 @@ namespace DnsWatcher.ConsoleApp
             try
             {
                 var ips = Dns.GetHostAddresses(hostname);
-                ip = ips.First().ToString();
+                ip = string.Join(", ", ips.Select(ip => ip.ToString().PadRight(15)));
             }
             catch (Exception e)
             {
