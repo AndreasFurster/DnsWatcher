@@ -24,16 +24,38 @@ namespace DnsWatcher.ConsoleApp
 
             if (!args.Any())
             {
-                Console.WriteLine("You should provide parameters");
+                Console.WriteLine("DNS Watcher - Watches DNS for changes.");
+                Console.WriteLine();
+                Console.WriteLine("Please provide the domain(s) and arguments. Seperate by spaces");
+                Console.WriteLine("--www, -w          Include www subdomain for all provided domains.");
+                Console.WriteLine("--check-once, -o   Only get IP's one time. Do not keep watching.");
+                Console.WriteLine();
+                Console.Write("Command: ");
+
+                var input = Console.ReadLine();
+                Main(input.Split(" "));
                 return;
             }
 
+            ProcessDomainInput(args);
+        }
+
+        
+
+        private static void ProcessDomainInput(string[] args)
+        {
             var hostnames = args.ToList();
 
+            var once = hostnames.Contains("--check-once") || hostnames.Contains("-o");
+            hostnames.Remove("--check-once");
+            hostnames.Remove("-o");
+
             // Prefix www
-            if (hostnames.Contains("-w"))
+            if (hostnames.Contains("--www") || hostnames.Contains("-w"))
             {
+                hostnames.Remove("--wwww");
                 hostnames.Remove("-w");
+
                 var prefixedHostnames = new List<string>();
 
                 foreach (var hostname in hostnames)
@@ -44,11 +66,17 @@ namespace DnsWatcher.ConsoleApp
                 hostnames.AddRange(prefixedHostnames);
             }
 
+            if(!hostnames.Any())
+            {
+                Console.WriteLine("No domains provided");
+                return;
+            }
+
             ServicePointManager.DnsRefreshTimeout = 0;
-            CheckHostnameAsync(hostnames);
+            CheckHostnameAsync(hostnames, once);
         }
 
-        private static void CheckHostnameAsync(List<string> hostnames)
+        private static void CheckHostnameAsync(List<string> hostnames, bool once = false)
         {
             _padLength = hostnames.Max(h => h.Length);
 
@@ -56,6 +84,8 @@ namespace DnsWatcher.ConsoleApp
             {
                 PrintIp(hostname);
             }
+
+            if (once) return;
 
             Thread.Sleep(3000);
             CheckHostnameAsync(hostnames);
