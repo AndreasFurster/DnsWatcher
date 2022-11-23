@@ -2,10 +2,12 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <AssemblyName>DnsWatcher</AssemblyName>
     <LangVersion>8.0</LangVersion>
     <NullableReferenceTypes>true</NullableReferenceTypes>
+    <StartupObject>DnsWatcher.ConsoleApp.Program</StartupObject>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
 </Project>

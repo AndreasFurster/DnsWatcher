@@ -33,6 +33,8 @@ namespace DnsWatcher.ConsoleApp
                 Console.Write("Command: ");
 
                 var input = Console.ReadLine();
+                if (input == null) return;
+
                 Main(input.Split(" "));
                 return;
             }

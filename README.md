@@ -3,11 +3,13 @@ Simple application that watches dns hostnames and notifies if anything changes.
 
 ## Usage
 `DnsWatcher.exe example.com [example2.com ...]`
+
 ### Download
 Download zip from releases and extract to a prefered location. Optionally add DnsWatcher.exe to envoirement path.
 
 ### Build
-This project is developed and build with Visual Studio 2019 Preview 1.1 and .net core 3.0 preview 1.
+
+    dotnet publish --configuration Release -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:CopyOutputSymbolsToPublishDirectory=false --self-contained 
 
 ## Example output
 
